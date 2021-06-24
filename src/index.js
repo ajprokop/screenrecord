@@ -24,7 +24,6 @@ async function startRecording() {
 	const chunks = [];
 	recorder.ondataavailable = e => chunks.push(e.data);
 	recorder.onstop = e => {
-		console.log("stop");
 		stop.setAttribute("disabled", true);
 		start.removeAttribute("disabled");
 		const completeBlob = new Blob(chunks, {
@@ -51,8 +50,8 @@ start.addEventListener("click", () => {
 });
 
 stop.addEventListener("click", () => {
-	stop.setAttribute("disabled", true);
-	start.removeAttribute("disabled");
+	//stop.setAttribute("disabled", true);
+	//start.removeAttribute("disabled");
 
 	recorder.stop();
 	stream.getVideoTracks()[0].stop();
