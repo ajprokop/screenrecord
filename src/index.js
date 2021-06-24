@@ -6,17 +6,25 @@ let recorder, stream;
 link.href = '';
 
 async function startRecording() {
-	stream = await navigator.mediaDevices.getDisplayMedia({
-		video: {
-			mediaSource: "screen"
-		}
-	});
 
+	try {
+		stream = await navigator.mediaDevices.getDisplayMedia({
+			video: {
+				mediaSource: "screen"
+			}
+		});
+	} catch (error) {
+		// User pressed Cancel on Screenshare dialog box
+		return;
+	}
+	start.setAttribute("disabled", true);
+	stop.removeAttribute("disabled");
 	recorder = new MediaRecorder(stream);
 
 	const chunks = [];
 	recorder.ondataavailable = e => chunks.push(e.data);
 	recorder.onstop = e => {
+		console.log("stop");
 		stop.setAttribute("disabled", true);
 		start.removeAttribute("disabled");
 		const completeBlob = new Blob(chunks, {
@@ -39,9 +47,6 @@ async function startRecording() {
 }
 
 start.addEventListener("click", () => {
-	start.setAttribute("disabled", true);
-	stop.removeAttribute("disabled");
-
 	startRecording();
 });
 
